@@ -1,0 +1,62 @@
+package config
+
+import (
+	"fmt"
+	"log"
+
+	"database/sql"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
+)
+
+var (
+	databaseConnection *sql.DB
+)
+
+const (
+	username = "root"
+	password = ""
+	hostname = "localhost:3306"
+	dbname   = "go_book_store_db"
+)
+
+func dsn(dbName string) string {
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, hostname, dbName)
+}
+func connectDB() *sql.DB {
+
+	dbConnection, err := sql.Open("mysql", dsn(dbname)) //Open("mysql", "root:@(localhost)/go_book_store_db?charset=utf8&parseTime=True&loc=Local")
+	/// user:password@(localhost)/dbname?charset=utf8&parseTime=True&loc=Local sql.Open("mysql", "root:<yourMySQLdatabasepassword>@tcp(127.0.0.1:3306)/test")
+	// db, err := gorm.Open("mysql", "user:password@/dbname?charset=utf8&parseTime=True&loc=Local")gorm.Open("mysql", "user:@/go_book_store_db?charset=utf8&parseTime=True&loc=Local")
+
+	// Now its  time to connect with oru database,
+	// database object has a method Ping.
+	// Ping returns error, if unable connect to database.
+
+	// handle error
+	if err != nil {
+		panic(err)
+	}
+
+	err = dbConnection.Ping()
+	databaseConnection = dbConnection
+	defer dbConnection.Close()
+	if err != nil {
+		panic("Unable to open database")
+	}
+	return databaseConnection
+}
+
+func LoadEnv() {
+	err := godotenv.Load(".env")
+	// err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error: unable to load the .env file")
+	}
+}
+
+func GetDBConnection() *sql.DB {
+	connectDB()
+	return databaseConnection
+}
