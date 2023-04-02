@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	// "database/sql"
-
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
@@ -23,8 +21,11 @@ const (
 )
 
 func dsn(dbName string) string {
-	return fmt.Sprintf("%s:%s@tcp(%s)/%s", username, password, hostname, dbName)
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", username, password, hostname, dbName)
 }
+
+// var User models.User
+
 func connectDB() *gorm.DB {
 
 	dbConnection, err := gorm.Open("mysql", dsn(dbname))
@@ -36,8 +37,6 @@ func connectDB() *gorm.DB {
 
 	// err = dbConnection.Ping()
 	databaseConnection = dbConnection
-
-	// err := dbConnection.AutoMigrate(&Book{})
 
 	// if err != nil {
 	// 	fmt.Print("Unable to migrate DB tables")

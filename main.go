@@ -1,22 +1,19 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net/http"
 	"os"
 
-	router "github.com/Bonifaceebuka/jwt-authentication-backend-service/routes"
+	"github.com/Bonifaceebuka/jwt-authentication-backend-service/config"
+	"github.com/Bonifaceebuka/jwt-authentication-backend-service/routes"
+	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
-	router := router.Router()
+	router := fiber.New()
+
+	config.LoadEnv()
 	port := os.Getenv("PORT")
-	port = ":" + port
-	fmt.Println("Starting the server on port %s", port)
-
-	log.Fatal(http.ListenAndServe(port, router))
-
-	fmt.Println("Server started on port %s", port)
+	routes.Router(router)
+	router.Listen(":" + port)
 
 }

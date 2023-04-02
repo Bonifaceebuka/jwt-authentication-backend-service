@@ -1,19 +1,19 @@
 package routes
 
 import (
-	controllers "github.com/Bonifaceebuka/book-store-RESTful-API-in-GO/controllers"
-	"github.com/gorilla/mux"
+	controllers "github.com/Bonifaceebuka/jwt-authentication-backend-service/controllers"
+	"github.com/gofiber/fiber/v2"
 )
 
-func Router() *mux.Router {
+func Router(router *fiber.App) {
 
-	router := mux.NewRouter()
-	router.HandleFunc("/", controllers.Home).Methods("GET")
-	router.HandleFunc("/book/store", controllers.StoreBook).Methods("POST", "OPTIONS")
-	router.HandleFunc("/books", controllers.GetAllBooks).Methods("GET", "OPTIONS")
-	router.HandleFunc("/book/{book_id}", controllers.GetBook).Methods("GET", "OPTIONS")
-	router.HandleFunc("/book/{book_id}", controllers.UpdateBook).Methods("PUT", "OPTIONS")
-	router.HandleFunc("/book/{book_id}", controllers.DeleteBook).Methods("DELETE", "OPTIONS")
+	router.Get("/", controllers.Home)
+	router.Post("/signup", controllers.Signup)
+	router.Post("/signin", controllers.Signin)
+	// router.HandleFunc("/books", controllers.GetAllBooks).Methods("GET", "OPTIONS")
+	// router.HandleFunc("/book/{book_id}", controllers.GetBook).Methods("GET", "OPTIONS")
+	// router.HandleFunc("/book/{book_id}", controllers.UpdateBook).Methods("PUT", "OPTIONS")
+	// router.HandleFunc("/book/{book_id}", controllers.DeleteBook).Methods("DELETE", "OPTIONS")
 
-	return router
+	// return router
 }
